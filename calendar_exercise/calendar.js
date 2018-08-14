@@ -6,7 +6,7 @@ var month = d.getMonth();
 var year = d.getFullYear();
 
 window.onload = function() {
-
+    changeSelectElement(month, year);
     //Get a day 
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
     var temp = new Date(first_date).toString(); // Wed, Aug 1 2018
@@ -18,6 +18,21 @@ window.onload = function() {
     var calendar = get_calendar(day_num, days);
     // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
+}
+
+function changeSelectElement(month_select, year_select) {
+    var month_select = document.getElementById("month-select").options.selectedIndex = month;
+    var length = document.getElementById("year-select").options.length;
+    var position;
+    var year_select;
+    for (var i = 0; i < length; i++) {
+        var num = document.getElementById("year-select").options[i].text;
+        if (parseInt(num) == year) {
+            position = i;
+            break;
+        }
+    }
+    year_select = document.getElementById("year-select").options.selectedIndex = position;
 }
 
 function get_calendar(day_num, days) {
@@ -78,7 +93,7 @@ function get_calendar(day_num, days) {
 
 }
 
-function modifyDate() {
+function modifyDate(month_modify, year_modify) {
     var table = document.getElementById("myId");
     table.parentNode.removeChild(table);
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
@@ -94,21 +109,54 @@ function modifyDate() {
 }
 
 function getNextMonth() {
-    month += 1;
-    modifyDate()
+    if (month == 11) {
+        month = 0;
+        year += 1;
+    } else {
+        month += 1;
+    }
+    modifyDate(month, year);
+    changeSelectElement(month, year);
 }
 
 function getNextYear() {
     year += 1;
-    modifyDate();
+    modifyDate(month, year);
+    changeSelectElement(month, year);
 }
 
 function getPrevMonth() {
-    month -= 1;
-    modifyDate();
+    if (month == 0) {
+        month = 11;
+        year -= 1;
+    } else {
+        month -= 1;
+    }
+    modifyDate(month, year);
+    changeSelectElement(month, year);
 }
 
 function getPrevYear() {
     year -= 1;
-    modifyDate();
+    modifyDate(month, year);
+    changeSelectElement(month, year);
+}
+
+function update_month() {
+    var month_selected = document.getElementById("month-select").value;
+    var position;
+    for (var i = 0; i < month_name.length; i++) {
+        if (month_name[i] == month_selected) {
+            position = i;
+            break;
+        }
+    }
+    month = position;
+    modifyDate(month, year);
+}
+
+function update_year() {
+    var year_selected = document.getElementById("year-select").value;
+    year = parseInt(year_selected);
+    modifyDate(month, year);
 }

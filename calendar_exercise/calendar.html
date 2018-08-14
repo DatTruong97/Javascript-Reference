@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Calendar Exercise</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="calendar.css" />
     <script src="calendar.js"></script>
@@ -23,8 +23,9 @@
             <table>
                 <tr>
                     <td style="background: #99D1D3" onclick="getPrevYear()">&lt;==</td>
-                    <td style="background: #99D1D3" onclick="getPrevMonth()">&lt;-</td>
-                    <td class="select" id="month-select"><select>
+                    <td style="background: #99D1D3" onclick="getPrevMonth()">&lt;=</td>
+                    <td class="select">
+                        <select id="month-select" onchange="update_month()">
                         <option value="January">January</option>
                         <option value="February">February</option>
                         <option value="March">March</option>
@@ -39,8 +40,8 @@
                         <option value="December">December</option>
                     </select>
                     </td>
-                    <td class="select" id="year-select">
-                        <select>
+                    <td class="select">
+                        <select id="year-select" onchange="update_year()">
                             <option value="1990">1990</option>
                             <option value="1991">1991</option>
                             <option value="1992">1992</option>
@@ -74,7 +75,7 @@
                             <option value="2020">2020</option>
                         </select>
                     </td>
-                    <td style="background: #99D1D3" onclick="getNextMonth()">-&gt;</td>
+                    <td style="background: #99D1D3" onclick="getNextMonth()">=&gt;</td>
                     <td style="background: #99D1D3" onclick="getNextYear()">==&gt;</td>
                 </tr>
             </table>

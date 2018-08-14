@@ -1,10 +1,11 @@
 var month_name = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var day_name = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 var d = new Date(); // return current date
 var month = d.getMonth();
 var year = d.getFullYear();
-window.onload = function initCalender() {
 
+window.onload = function() {
 
     //Get a day 
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
@@ -21,14 +22,9 @@ window.onload = function initCalender() {
 
 function get_calendar(day_num, days) {
     var table = document.createElement("table");
+    table.setAttribute("id", "myId");
     var tr = document.createElement("tr");
-
-    var button = document.createElement("button");
-    button.innerText = "<==";
-
-    tr.appendChild(button);
     //row for the day letters
-    tr = document.createElement("tr");
     for (var i = 0; i <= 6; i++) {
         var td = document.createElement("td");
         td.innerHTML = day_name[i];
@@ -62,7 +58,7 @@ function get_calendar(day_num, days) {
     }
     table.appendChild(tr);
     //The rest of the date rows
-    for (var r = 3; r <= 6; r++) {
+    for (var r = 3; r <= 7; r++) {
         tr = document.createElement("tr");
         for (var i = 0; i <= 6; i++) {
             if (count > days) {
@@ -82,8 +78,9 @@ function get_calendar(day_num, days) {
 
 }
 
-function getNextMonth() {
-    month += 1;
+function modifyDate() {
+    var table = document.getElementById("myId");
+    table.parentNode.removeChild(table);
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
     var temp = new Date(first_date).toString(); // Wed, Aug 1 2018
     var first_day = temp.substring(0, 3); // return Wed
@@ -94,4 +91,24 @@ function getNextMonth() {
     var calendar = get_calendar(day_num, days);
     // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
+}
+
+function getNextMonth() {
+    month += 1;
+    modifyDate()
+}
+
+function getNextYear() {
+    year += 1;
+    modifyDate();
+}
+
+function getPrevMonth() {
+    month -= 1;
+    modifyDate();
+}
+
+function getPrevYear() {
+    year -= 1;
+    modifyDate();
 }

@@ -15,7 +15,7 @@ window.onload = function() {
     var day_num = day_name.indexOf(first_day); // return 3
     //Get the last day
     var days = new Date(year, month + 1, 0).getDate(); //31
-    var calendar = get_calendar(day_num, days);
+    var calendar = get_calendar(day_num, days, d.getDate());
     // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
 }
@@ -35,7 +35,7 @@ function changeSelectElement(month_select, year_select) {
     year_select = document.getElementById("year-select").options.selectedIndex = position;
 }
 
-function get_calendar(day_num, days) {
+function get_calendar(day_num, days, current_date) {
     var table = document.createElement("table");
     table.setAttribute("id", "myId");
     var tr = document.createElement("tr");
@@ -65,7 +65,7 @@ function get_calendar(day_num, days) {
     for (var j = day_num; j <= 6; j++) {
         var td = document.createElement("td");
         td.innerHTML = count;
-        if (td.innerHTML == d.getDate()) {
+        if (td.innerHTML == current_date) {
             td.style.background = "#00B2BF";
         }
         count++;
@@ -82,7 +82,7 @@ function get_calendar(day_num, days) {
             }
             var td = document.createElement("td");
             td.innerHTML = count;
-            if (td.innerHTML == d.getDate()) {
+            if (td.innerHTML == current_date) {
                 td.style.background = "#00B2BF";
             }
             count++;
@@ -93,7 +93,7 @@ function get_calendar(day_num, days) {
 
 }
 
-function modifyDate(month_modify, year_modify) {
+function modifyDate(month_modify, year_modify, current_date) {
     var table = document.getElementById("myId");
     table.parentNode.removeChild(table);
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
@@ -103,7 +103,7 @@ function modifyDate(month_modify, year_modify) {
     var day_num = day_name.indexOf(first_day); // return 3
     //Get the last day
     var days = new Date(year, month + 1, 0).getDate(); //31
-    var calendar = get_calendar(day_num, days);
+    var calendar = get_calendar(day_num, days, current_date);
     // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
 }
@@ -115,13 +115,13 @@ function getNextMonth() {
     } else {
         month += 1;
     }
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
     changeSelectElement(month, year);
 }
 
 function getNextYear() {
     year += 1;
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
     changeSelectElement(month, year);
 }
 
@@ -132,13 +132,13 @@ function getPrevMonth() {
     } else {
         month -= 1;
     }
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
     changeSelectElement(month, year);
 }
 
 function getPrevYear() {
     year -= 1;
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
     changeSelectElement(month, year);
 }
 
@@ -152,11 +152,23 @@ function update_month() {
         }
     }
     month = position;
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
 }
 
 function update_year() {
     var year_selected = document.getElementById("year-select").value;
     year = parseInt(year_selected);
-    modifyDate(month, year);
+    modifyDate(month, year, d.getDate());
+}
+
+function getDesiredDate() {
+    var text = document.getElementById("text-input").value;
+    var month_text = text.substring(0, 2);
+    var day_text = text.substring(3, 5);
+    var year_text = text.substring(6);
+    month = parseInt(month_text - 1);
+    year = parseInt(year_text);
+    day = parseInt(day_text);
+    modifyDate(month, year, day);
+    changeSelectElement(month, year);
 }

@@ -11,10 +11,18 @@ td {
     padding: 0px;
 }
 
-select {
-    height: 100%;
+.select select {
+    height: 44px;
+}
+
+.select input {
+    height: 40px;
 }
 
 input {
     height: 100%;
+}
+
+img {
+    border: none;
 }

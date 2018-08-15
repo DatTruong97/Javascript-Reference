@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="formAjax.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="calendar.css" />
     <script src="calendar.js"></script>
+    <script src="formAjax.js"></script>
 </head>
 
 <body>
@@ -34,11 +35,11 @@
                 <span id="calendar-month-year"></span>
                 <table>
                     <tr>
-                        <td class="birthday-section"><input type="text" id="text-input" placeholder="mm/dd/yyyy"></td>
+                        <td class="birthday-section"><input type="text" id="text-input" placeholder="mm/dd/yyyy" onclick="click_input()"></td>
                         <td class="birthday-section"><img src="calendar.jpg" alt="Can't load image" onclick="getDesiredDate()" /></td>
                     </tr>
                 </table>
-                <table>
+                <table id="calendar-tools">
                     <tr>
                         <td style="background: #99D1D3" onclick="getPrevYear()">&lt;==</td>
                         <td style="background: #99D1D3" onclick="getPrevMonth()">&lt;=</td>

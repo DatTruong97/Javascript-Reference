@@ -5,7 +5,8 @@ var d = new Date(); // return current date
 var month = d.getMonth();
 var year = d.getFullYear();
 
-window.onload = function() {
+function click_input() {
+    document.getElementById("calendar-tools").style.visibility = "visible";
     changeSelectElement(month, year);
     //Get a day 
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018

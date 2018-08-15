@@ -14,3 +14,22 @@ window.onload = function() {
     document.getElementById("myId").style.visibility = "hidden";
     document.getElementById("calendar-tools").style.visibility = "hidden";
 }
+
+function checkValidate() {
+    var username = document.getElementById("username").value;
+    var text;
+    if (username.length < 8) {
+        text = "Username length min 8 letters";
+    } else {
+        text = "OK!";
+    }
+    document.getElementById("username-notify").innerHTML = text;
+    var password = document.getElementById("password").value;
+    var text;
+    if (password.length < 8) {
+        text = "Password length min 8 letters";
+    } else {
+        text = "OK!";
+    }
+    document.getElementById("password-notify").innerHTML = text;
+}

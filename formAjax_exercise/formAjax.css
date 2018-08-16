@@ -73,3 +73,7 @@
     label {
         font-weight: bold;
     }
+    
+    input:invalid:not(:focus) {
+        outline: 1px solid #f00;
+    }

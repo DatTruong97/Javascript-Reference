@@ -16,12 +16,14 @@ window.onload = function() {
 }
 
 function checkValidate() {
+    var count = 0;
     var username = document.getElementById("username").value;
     var text;
     if (username.length < 8) {
         text = "Username length min 8 letters";
     } else {
         text = "OK!";
+        count++;
     }
     document.getElementById("username-notify").innerHTML = text;
     var password = document.getElementById("password").value;
@@ -30,6 +32,24 @@ function checkValidate() {
         text = "Password length min 8 letters";
     } else {
         text = "OK!";
+        count++;
     }
     document.getElementById("password-notify").innerHTML = text;
+    var email = document.getElementById("email").value;
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email.match(mailformat)) {
+        text = "OK!";
+        count++;
+    } else {
+        text = "Wrong Email Format";
+    }
+    document.getElementById("email-notify").innerHTML = text;
+    var date_string = document.getElementById("birthday-input").value;
+    var date_input = new Date(date_string);
+    var current_date = new Date();
+    if (date_input.getTime() < current_date.getTime()) {
+        count++;
+    } else {
+        alert("illegal date (Your bitrhday > current date) ");
+    }
 }

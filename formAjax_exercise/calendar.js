@@ -153,7 +153,7 @@ function update_year() {
 }
 
 function getDesiredDate() {
-    var text = document.getElementById("text-input").value;
+    var text = document.getElementById("birthday-input").value;
     var month_text = text.substring(0, 2);
     var day_text = text.substring(3, 5);
     var year_text = text.substring(6);

@@ -62,8 +62,8 @@ public class checkInfo1 extends HttpServlet {
 			}
 			if(!exist){
 				System.out.println("test!!!!");
-				 Date utilDate= (Date) new SimpleDateFormat("MM-dd-yyyy").parse(birthdayInput);
-				 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); 
+				 java.util.Date date= new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInput);
+				 java.sql.Date sqldate=new java.sql.Date(date.getTime()); 
 				 PreparedStatement mySta2;
 				  mySta2=myConn.prepareStatement(
 						"insert into user " +
@@ -73,7 +73,7 @@ public class checkInfo1 extends HttpServlet {
 				  mySta2.setString(1, usernameInput);
 				  mySta2.setString(2, passwordInput);
 				  mySta2.setString(3, emailInput);
-				  mySta2.setDate(4, sqlDate);
+				  mySta2.setDate(4, sqldate);
 				  mySta2.executeUpdate();
 				out.print("Your user account has been added to our account");
 				System.out.println("Your account has been added to our account");

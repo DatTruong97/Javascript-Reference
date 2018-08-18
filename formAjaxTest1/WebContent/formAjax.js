@@ -9,6 +9,8 @@ window.onload = function() {
     //Get the last day
     var days = new Date(year, month + 1, 0).getDate(); //31
     var calendar = get_calendar(day_num, days, d.getDate());
+    initYearSelect();
+
     // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
     document.getElementById("myId").style.visibility = "hidden";
@@ -60,7 +62,7 @@ function checkValidate() {
                 document.getElementById("username-notify").innerHTML = xhttp.responseText;
             }
         };
-        xhttp.open("GET", "checkInfo1?username="+username+"&password="+password+"&email="+email+"&birthday="+date_string, true);
+        xhttp.open("GET", "checkInfo1?username=" + username + "&password=" + password + "&email=" + email + "&birthday=" + date_string, true);
         xhttp.send();
     }
 }

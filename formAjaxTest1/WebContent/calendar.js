@@ -56,6 +56,7 @@ function get_calendar(day_num, days, current_date) {
     for (var j = day_num; j <= 6; j++) {
         var td = document.createElement("td");
         td.innerHTML = count;
+        td.onclick = function() { addRowHandlers(1, j) };
         if (td.innerHTML == current_date) {
             td.style.background = "#00B2BF";
         }
@@ -73,6 +74,7 @@ function get_calendar(day_num, days, current_date) {
             }
             var td = document.createElement("td");
             td.innerHTML = count;
+            td.onclick = function() { addRowHandlers(r, i) };
             if (td.innerHTML == current_date) {
                 td.style.background = "#00B2BF";
             }
@@ -82,6 +84,16 @@ function get_calendar(day_num, days, current_date) {
         table.appendChild(tr);
     }
 
+}
+
+function initYearSelect() {
+    var select = document.getElementById("year-select");
+    for (var i = 1900; i <= 2030; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        select.appendChild(option);
+    }
 }
 
 function modifyDate(month_modify, year_modify, current_date) {
@@ -162,4 +174,33 @@ function getDesiredDate() {
     day = parseInt(day_text);
     modifyDate(month, year, day);
     changeSelectElement(month, year);
+}
+
+function chooseDate(dayClick) {
+    var text;
+    var monthString = document.getElementById("month-select").value;
+    var monthDisplay;
+    for (var i = 0; i < month_name.length; i++) {
+        if (month_name[i] == monthString) {
+            monthDisplay = i + 1;
+        }
+    }
+    var yearDisplay = document.getElementById("year-select").value;
+    text = monthDisplay + "/" + dayClick + "/" + yearDisplay;
+    document.getElementById("birthday-input").value = text;
+}
+
+function addRowHandlers(rowPosition, cellPosition) {
+    var table = document.getElementById("myId");
+    var rows = table.getElementsByTagName("tr");
+    //for (i = 0; i < rows.length; i++) {
+    var currentRow = table.rows[rowPosition];
+    var createClickHandler = function(row) {
+        return function() {
+            var cell = row.getElementsByTagName("td")[cellPosition];
+            chooseDate(cell.innerHTML);
+        };
+    };
+    currentRow.onclick = createClickHandler(currentRow);
+    //}
 }

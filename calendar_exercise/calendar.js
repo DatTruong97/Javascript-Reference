@@ -4,8 +4,9 @@ var day_name = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var d = new Date(); // return current date
 var month = d.getMonth();
 var year = d.getFullYear();
-
+var current_date = d.getDate();
 window.onload = function() {
+    initYearSelect();
     changeSelectElement(month, year);
     //Get a day 
     var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
@@ -65,6 +66,7 @@ function get_calendar(day_num, days, current_date) {
     for (var j = day_num; j <= 6; j++) {
         var td = document.createElement("td");
         td.innerHTML = count;
+        td.onclick = function() { addRowHandlers() };
         if (td.innerHTML == current_date) {
             td.style.background = "#00B2BF";
         }
@@ -82,6 +84,7 @@ function get_calendar(day_num, days, current_date) {
             }
             var td = document.createElement("td");
             td.innerHTML = count;
+            td.onclick = function() { addRowHandlers() };
             if (td.innerHTML == current_date) {
                 td.style.background = "#00B2BF";
             }
@@ -91,6 +94,16 @@ function get_calendar(day_num, days, current_date) {
         table.appendChild(tr);
     }
 
+}
+
+function initYearSelect() {
+    var select = document.getElementById("year-select");
+    for (var i = 1900; i <= 2030; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        select.appendChild(option);
+    }
 }
 
 function modifyDate(month_modify, year_modify, current_date) {
@@ -171,4 +184,47 @@ function getDesiredDate() {
     day = parseInt(day_text);
     modifyDate(month, year, day);
     changeSelectElement(month, year);
+}
+
+function chooseDate(currentCell) {
+    var text;
+    dateOld = current_date;
+    current_date = currentCell.innerHTML;
+    var tbl = document.getElementById("myId");
+    if (tbl != null) {
+        for (var i = 0; i < tbl.rows.length; i++) {
+            for (var j = 0; j < tbl.rows[i].cells.length; j++) {
+                var test = tbl.rows[i].cells[j].innerHTML;
+                if (test == dateOld) {
+                    tbl.rows[i].cells[j].style.background = "#FFFFFF";
+                }
+            }
+        }
+
+    }
+    currentCell.style.background = "#5BBD2B";
+    var dayClick = currentCell.innerHTML;
+    var monthString = document.getElementById("month-select").value;
+    var monthDisplay;
+    for (var i = 0; i < month_name.length; i++) {
+        if (month_name[i] == monthString) {
+            monthDisplay = i + 1;
+        }
+    }
+    var yearDisplay = document.getElementById("year-select").value;
+    text = monthDisplay + "/" + dayClick + "/" + yearDisplay;
+    document.getElementById("text-input").value = text;
+}
+
+
+function addRowHandlers() {
+    var tbl = document.getElementById("myId");
+    if (tbl != null) {
+        for (var i = 0; i < tbl.rows.length; i++) {
+            for (var j = 0; j < tbl.rows[i].cells.length; j++) {
+                tbl.rows[i].cells[j].onclick = function() { chooseDate(this); };
+            }
+        }
+
+    }
 }

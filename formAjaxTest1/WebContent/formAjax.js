@@ -17,6 +17,7 @@ window.onload = function() {
     document.getElementById("calendar-tools").style.visibility = "hidden";
 }
 
+
 function checkValidate() {
     var count = 0;
     var username = document.getElementById("username").value;

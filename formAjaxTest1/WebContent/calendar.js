@@ -4,6 +4,8 @@ var day_name = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var d = new Date(); // return current date
 var month = d.getMonth();
 var year = d.getFullYear();
+var current_date = d.getDate();
+var dateOld;
 
 function click_input() {
     document.getElementById("calendar-tools").style.visibility = "visible";
@@ -56,7 +58,7 @@ function get_calendar(day_num, days, current_date) {
     for (var j = day_num; j <= 6; j++) {
         var td = document.createElement("td");
         td.innerHTML = count;
-        td.onclick = function() { addRowHandlers(1, j) };
+        td.onclick = function() { addRowHandlers() };
         if (td.innerHTML == current_date) {
             td.style.background = "#00B2BF";
         }
@@ -74,7 +76,7 @@ function get_calendar(day_num, days, current_date) {
             }
             var td = document.createElement("td");
             td.innerHTML = count;
-            td.onclick = function() { addRowHandlers(r, i) };
+            td.onclick = function() { addRowHandlers() };
             if (td.innerHTML == current_date) {
                 td.style.background = "#00B2BF";
             }
@@ -176,8 +178,24 @@ function getDesiredDate() {
     changeSelectElement(month, year);
 }
 
-function chooseDate(dayClick) {
+function chooseDate(currentCell) {
     var text;
+    dateOld = current_date;
+    current_date = currentCell.innerHTML;
+    var tbl = document.getElementById("myId");
+    if (tbl != null) {
+        for (var i = 0; i < tbl.rows.length; i++) {
+            for (var j = 0; j < tbl.rows[i].cells.length; j++) {
+                var test = tbl.rows[i].cells[j].innerHTML;
+                if (test == dateOld) {
+                    tbl.rows[i].cells[j].style.background = "#FFFFFF";
+                }
+            }
+        }
+
+    }
+    currentCell.style.background = "#00B2BF";
+    var dayClick = currentCell.innerHTML;
     var monthString = document.getElementById("month-select").value;
     var monthDisplay;
     for (var i = 0; i < month_name.length; i++) {
@@ -190,17 +208,15 @@ function chooseDate(dayClick) {
     document.getElementById("birthday-input").value = text;
 }
 
-function addRowHandlers(rowPosition, cellPosition) {
-    var table = document.getElementById("myId");
-    var rows = table.getElementsByTagName("tr");
-    //for (i = 0; i < rows.length; i++) {
-    var currentRow = table.rows[rowPosition];
-    var createClickHandler = function(row) {
-        return function() {
-            var cell = row.getElementsByTagName("td")[cellPosition];
-            chooseDate(cell.innerHTML);
-        };
-    };
-    currentRow.onclick = createClickHandler(currentRow);
-    //}
+
+function addRowHandlers() {
+    var tbl = document.getElementById("myId");
+    if (tbl != null) {
+        for (var i = 0; i < tbl.rows.length; i++) {
+            for (var j = 0; j < tbl.rows[i].cells.length; j++) {
+                tbl.rows[i].cells[j].onclick = function() { chooseDate(this); };
+            }
+        }
+
+    }
 }

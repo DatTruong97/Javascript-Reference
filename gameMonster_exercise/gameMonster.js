@@ -16,6 +16,8 @@ var mousePosY = -1;
 var showBlood = false;
 var blood;
 var level = 1;
+var timeLive = 500;
+var isLose = false;
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -49,7 +51,7 @@ var stopImage = new Image();
 stopImage.onload = function() {};
 stopImage.src = "images/stop.png";
 
-function Monster(beginX, beginY, endX, endY, startX, startY, stopX, stopY, speed, click, show, dieX, dieY, timeLive) {
+function Monster(beginX, beginY, endX, endY, startX, startY, stopX, stopY, speed, click, show, dieX, dieY) {
     this.beginX = beginX;
     this.beginY = beginY;
     this.endX = endX;
@@ -67,28 +69,27 @@ function Monster(beginX, beginY, endX, endY, startX, startY, stopX, stopY, speed
     this.show = show;
     this.dieX = dieX;
     this.dieY = dieY;
-    this.timeLive = timeLive;
     this.isKilled = false;
 }
 //Create game's monster
-var monster1 = new Monster(50, 50, playround.width - 70, playround.height - 70, 50, 50, playround.width - 70, playround.height - 70, speed, false, true, 0, 0, 500);
+var monster1 = new Monster(50, 50, playround.width - 70, playround.height - 70, 50, 50, playround.width - 70, playround.height - 70, speed, false, true, 0, 0);
 monsters.push(monster1);
-var monster2 = new Monster(0, 80, playround.width - 70, playround.height - 70, 0, 80, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster2 = new Monster(0, 80, playround.width - 70, playround.height - 70, 0, 80, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster2);
-var monster3 = new Monster(0, 200, playround.width - 70, playround.height - 70, 0, 200, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster3 = new Monster(0, 200, playround.width - 70, playround.height - 70, 0, 200, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster3);
-var monster4 = new Monster(80, 220, playround.width - 70, playround.height - 70, 80, 220, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster4 = new Monster(80, 220, playround.width - 70, playround.height - 70, 80, 220, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster4);
-var monster5 = new Monster(400, 250, playround.width - 70, playround.height - 70, 400, 250, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster5 = new Monster(400, 250, playround.width - 70, playround.height - 70, 400, 250, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster5);
-var monster6 = new Monster(400, 0, playround.width - 70, playround.height - 70, 400, 0, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster6 = new Monster(400, 0, playround.width - 70, playround.height - 70, 400, 0, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster6);
-var monster7 = new Monster(0, 180, playround.width - 70, playround.height - 70, 0, 180, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster7 = new Monster(0, 180, playround.width - 70, playround.height - 70, 0, 180, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster7);
-var monster8 = new Monster(120, 0, playround.width - 70, playround.height - 70, 120, 0, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster8 = new Monster(120, 0, playround.width - 70, playround.height - 70, 120, 0, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster8);
 var randomPosition = Math.floor(Math.random() * 400 + 1);
-var monster9 = new Monster(randomPosition, randomPosition, playround.width - 70, playround.height - 70, randomPosition, randomPosition, playround.width - 70, playround.height - 70, speed, false, false, 0, 0, 500);
+var monster9 = new Monster(randomPosition, randomPosition, playround.width - 70, playround.height - 70, randomPosition, randomPosition, playround.width - 70, playround.height - 70, speed, false, false, 0, 0);
 monsters.push(monster9);
 
 Monster.prototype.draw = function(startX, startY) {
@@ -97,8 +98,8 @@ Monster.prototype.draw = function(startX, startY) {
 
 Monster.prototype.move = function() {
 
-    this.startX += this.speedX;
-    this.startY += this.speedY;
+    this.startX += (this.speedX) * level * 0.5;
+    this.startY += (this.speedY) * level * 0.5;
     if (this.startX > this.stopX || this.startX < this.positionX) {
         this.speedX *= -1;
     }
@@ -106,9 +107,12 @@ Monster.prototype.move = function() {
     if (this.startY > this.stopY || this.startY < this.positionY) {
         this.speedY *= -1;
     }
-
-    this.timeLive--;
-    if (this.timeLive == 0) {
+    changeLevel();
+    if (score == 0) {
+        isLose = true;
+    }
+    timeLive--;
+    if (timeLive <= 0) {
         this.refreshMonster;
         score -= 10;
         chooseRandom();
@@ -119,33 +123,42 @@ Monster.prototype.move = function() {
 Monster.prototype.refreshMonster = function() {
     this.startX = this.beginX;
     this.startY = this.beginY;
-    this.stopX = this.endX;
-    this.stopY = this.endY;
+    /*this.stopX = this.endX;
+    this.stopY = this.endY;*/
     this.speedX = this.speedY = speed;
     this.isKilled = false;
     this.show = false;
-    this.timeLive = 500;
+    if (level == 1) {
+        timeLive = 500;
+    }
+    if (level == 2) {
+        timeLive = 400;
+    }
+    if (level == 3) {
+        timeLive = 300;
+    }
+    if (level == 4) {
+        timeLive = 200;
+    }
+    if (level == 5) {
+        timeLive = 100;
+    }
 }
 
 Monster.prototype.kill = function(positionX, positionY) {
-        if ((positionX > this.startX && positionX < this.startX + 50) || (positionY > this.startY && positionY < this.startY + 50)) {
-            this.isKilled = true;
-            mousePosX = positionX;
-            mousePosY = positionY;
-            showBlood = true;
-            //this.speedX = this.speedY = 0;
-            score += 10;
-            //changeLevel();
-            //this.addBlood(this.startX, this.startY);
-            chooseRandom();
-            // this.timeLive = 30;
-
-        }
+    if ((positionX > this.startX && positionX < this.startX + 30) || (positionY > this.startY && positionY < this.startY + 30)) {
+        console.log("Click monster " + checkMonsterPos);
+        //this.isKilled = true;
+        this.show = false;
+        mousePosX = positionX;
+        mousePosY = positionY;
+        showBlood = true;
+        score += 10;
+        changeLevel();
+        timeLive -= 50;
     }
-    /*Monster.prototype.addBlood = function(positionX, positionY) {
-        console.log("Blood!!");
-        playroundContext.drawImage(bloodImage, positionX, positionY);
-    }*/
+}
+
 function addBlood(posX, posY) {
     if (bloodLive > 0) {
         playroundContext.drawImage(bloodImage, posX, posY, 80, 80);
@@ -205,57 +218,77 @@ function getMousePos(canvas, event) {
 }
 
 function changeLevel() {
-    if (score == 300) {
+    if (score <= 10) {
+        hearts = 0;
+    } else if (score <= 50) {
+        hearts = 1;
+    } else if (score <= 100) {
+        hearts = 2;
+    } else if (score <= 200) {
+        hearts = 3;
+    } else if (score <= 300) {
+        hearts = 4;
+    } else if (score <= 600) {
         level = 2;
-        speed++;
-        monsterRandomNum++;
-    }
-    if (score == 600) {
+        speed = 2;
+        monsterRandomNum = 2;
+        hearts = 5;
+    } else if (score <= 900) {
         level = 3;
-        speed++;
-        monsterRandomNum++;
-    }
-    if (score == 900) {
+        speed = 3;
+        monsterRandomNum = 3;
+        hearts = 6;
+    } else if (score <= 1200) {
         level = 4;
-        speed++;
-        monsterRandomNum++;
-    }
-    if (score = 1200) {
+        speed = 4;
+        monsterRandomNum = 4;
+        hearts = 7;
+    } else {
         level = 5;
-        speed++;
-        monsterRandomNum++;
+        speed = 5;
+        monsterRandomNum = 5;
+        hearts = 8;
     }
 }
+var checkMonsterPos;
 playround.addEventListener("click", function(event) {
     mousePos = getMousePos(playround, event);
     for (var i = 0; i < monsters.length; i++) {
         if (monsters[i].show) {
-            console.log("Blood: " + i);
+            checkMonsterPos = i;
             monsters[i].kill(mousePos.x, mousePos.y);
         }
     }
 });
 
+
 function main() {
     drawImage();
-    for (var i = 0; i < monsters.length; i++) {
-        if (monsters[i].show) {
-            console.log("main: " + i);
-            /*if (monsters[i].isKilled == true) {
-                var blood = new Blood(mousePosX, mousePosY);
-                blood.draw();
-            }*/
-            monsters[i].move();
+    if (isLose) {
+        playroundContext.fillStyle = "#FFFFFF";
+        playroundContext.font = "40px Arial";
+        playroundContext.fillText("Game Over!!!", 130, 200);
+        cancelAnimationFrame(main);
+    }
+    if (!isLose) {
+        var count = 0;
+        for (var i = 0; i < monsters.length; i++) {
+            if (monsters[i].show) {
+                console.log("main: " + i);
+                count++;
+                monsters[i].move();
+            }
+        }
+        if (count == 0) {
+            chooseRandom();
+        }
+        if (mousePosX != -1 && mousePosY != -1 && showBlood == true) {
+            addBlood(mousePosX, mousePosY);
         }
     }
-    if (mousePosX != -1 && mousePosY != -1 && showBlood == true) {
-        console.log("Blood!!");
-        addBlood(mousePosX, mousePosY);
-    }
+
     requestAnimationFrame(main);
 }
-
-
 
 requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame || window.mozRequestAnimationFrame;

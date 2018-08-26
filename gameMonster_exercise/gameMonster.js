@@ -18,6 +18,7 @@ var blood;
 var level = 1;
 var timeLive = 500;
 var isLose = false;
+var isRestart = false;
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -250,6 +251,16 @@ function changeLevel() {
         hearts = 8;
     }
 }
+
+function restart() {
+    for (var i = 0; i < monsters.length; i++) {
+        monsters[i].show = false;
+    }
+    score = 40;
+    level = 1;
+    speed = 1;
+    monsterRandomNum = 1;
+}
 var checkMonsterPos;
 playround.addEventListener("click", function(event) {
     mousePos = getMousePos(playround, event);
@@ -260,10 +271,19 @@ playround.addEventListener("click", function(event) {
         }
     }
 });
-
+control.addEventListener("click", function() {
+    controlMousePos = getMousePos(control, event);
+    if (controlMousePos.x >= 445 && controlMousePos.x <= 475 && controlMousePos.y >= 70 && controlMousePos.y <= 100) {
+        isRestart = true;
+    }
+});
 
 function main() {
     drawImage();
+    if (isRestart) {
+        restart();
+        isRestart = false;
+    }
     if (isLose) {
         playroundContext.fillStyle = "#FFFFFF";
         playroundContext.font = "40px Arial";

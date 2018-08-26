@@ -1,4 +1,4 @@
-var canvas = document.getElementById("playround");
+var canvas = document.getElementById("control");
 var context = canvas.getContext("2d");
 
 canvas.addEventListener("mousemove", function(event) {

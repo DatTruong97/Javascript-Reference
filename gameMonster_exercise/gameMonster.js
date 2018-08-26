@@ -23,6 +23,7 @@ var isPause = false;
 var pauseTime = 300;
 var isStop = false;
 var isResume = false;
+var isBoom = false;
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -264,6 +265,8 @@ function restart() {
     level = 1;
     speed = 1;
     monsterRandomNum = 1;
+    boomNum = 3;
+    stopNum = 3;
 }
 
 function pause() {
@@ -282,7 +285,6 @@ function pause() {
 
 function stop() {
     if (stopNum >= 0) {
-
         for (var i = 0; i < monsters.length; i++) {
             if (monsters[i].show) {
                 monsters[i].speedX = 0;
@@ -290,15 +292,22 @@ function stop() {
             }
         }
     }
-    /*if (stopNum <= 0) {
-        stopNum = 0;
-        isStop = false;
-    }*/
+}
+
+function boom() {
+    if (boomNum >= 0) {
+        for (var i = 0; i < monsters.length; i++) {
+            if (monsters[i].show) {
+                monsters[i].show = false;
+            }
+        }
+    }
 }
 var checkMonsterPos;
 playround.addEventListener("click", function(event) {
     isResume = true;
     isStop = false;
+    isBoom = false;
     mousePos = getMousePos(playround, event);
     for (var i = 0; i < monsters.length; i++) {
         if (monsters[i].show) {
@@ -325,6 +334,15 @@ control.addEventListener("click", function() {
             stopNum = 0;
         }
     }
+    if (controlMousePos.x >= 300 && controlMousePos.x <= 330 && controlMousePos.y >= 70 && controlMousePos.y <= 100) {
+        if (boomNum > 0) {
+            isBoom = true;
+            boomNum--;
+        } else {
+            isBoom = false;
+            boomNum = 0;
+        }
+    }
 });
 
 function main() {
@@ -342,13 +360,17 @@ function main() {
     if (isStop && !isResume) {
         stop();
     }
-
+    if (isBoom) {
+        boom();
+        isBoom = false;
+    }
     if (isLose) {
         playroundContext.fillStyle = "#FFFFFF";
         playroundContext.font = "40px Arial";
         playroundContext.fillText("Game Over!!!", 130, 200);
         cancelAnimationFrame(main);
     }
+
     if (!isLose && !isPause && !isStop) {
         var count = 0;
         for (var i = 0; i < monsters.length; i++) {

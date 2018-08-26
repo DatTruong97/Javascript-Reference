@@ -21,6 +21,8 @@ var isLose = false;
 var isRestart = false;
 var isPause = false;
 var pauseTime = 300;
+var isStop = false;
+var isResume = false;
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -277,8 +279,26 @@ function pause() {
         isPause = false;
     }
 }
+
+function stop() {
+    if (stopNum >= 0) {
+
+        for (var i = 0; i < monsters.length; i++) {
+            if (monsters[i].show) {
+                monsters[i].speedX = 0;
+                monsters[i].speedY = 0;
+            }
+        }
+    }
+    /*if (stopNum <= 0) {
+        stopNum = 0;
+        isStop = false;
+    }*/
+}
 var checkMonsterPos;
 playround.addEventListener("click", function(event) {
+    isResume = true;
+    isStop = false;
     mousePos = getMousePos(playround, event);
     for (var i = 0; i < monsters.length; i++) {
         if (monsters[i].show) {
@@ -296,6 +316,15 @@ control.addEventListener("click", function() {
         isPause = true;
         pauseTime = 300;
     }
+    if (controlMousePos.x >= 350 && controlMousePos.x <= 380 && controlMousePos.y >= 70 && controlMousePos.y <= 100) {
+        if (stopNum > 0) {
+            isStop = true;
+            stopNum--;
+        } else {
+            isStop = false;
+            stopNum = 0;
+        }
+    }
 });
 
 function main() {
@@ -310,13 +339,17 @@ function main() {
         playroundContext.fillText("Pause!!!", 130, 200);
         pause();
     }
+    if (isStop && !isResume) {
+        stop();
+    }
+
     if (isLose) {
         playroundContext.fillStyle = "#FFFFFF";
         playroundContext.font = "40px Arial";
         playroundContext.fillText("Game Over!!!", 130, 200);
         cancelAnimationFrame(main);
     }
-    if (!isLose && !isPause) {
+    if (!isLose && !isPause && !isStop) {
         var count = 0;
         for (var i = 0; i < monsters.length; i++) {
             if (monsters[i].show) {

@@ -24,6 +24,7 @@ var pauseTime = 300;
 var isStop = false;
 var isResume = false;
 var isBoom = false;
+
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -160,6 +161,10 @@ Monster.prototype.kill = function(positionX, positionY) {
         mousePosY = positionY;
         showBlood = true;
         score += 10;
+        var temp = parseInt(localStorage.getItem("highScore"));
+        if (temp < score) {
+            localStorage.setItem("highScore", score);
+        }
         changeLevel();
         timeLive -= 50;
     }
@@ -364,10 +369,17 @@ function main() {
         boom();
         isBoom = false;
     }
+    /*if (hearts == 0) {
+        var temp = parseInt(localStorage.getItem("highScore"));
+        if (temp < score) {
+            localStorage.setItem("highScore", score);
+        }
+    }*/
     if (isLose) {
         playroundContext.fillStyle = "#FFFFFF";
         playroundContext.font = "40px Arial";
         playroundContext.fillText("Game Over!!!", 130, 200);
+        playroundContext.fillText("High score = " + localStorage.getItem("highScore"), 130, 280);
         cancelAnimationFrame(main);
     }
 

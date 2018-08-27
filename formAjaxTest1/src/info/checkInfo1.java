@@ -10,7 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  * Servlet implementation class checkInfo1
  */
@@ -23,7 +28,6 @@ public class checkInfo1 extends HttpServlet {
      */
     public checkInfo1() {
         super();
-        // TODO Auto-generated constructor stub
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request,response);
@@ -33,20 +37,45 @@ public class checkInfo1 extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
 		String usernameInput=request.getParameter("username");
 		String passwordInput=request.getParameter("password");
 		String emailInput=request.getParameter("email");
 		String birthdayInput=request.getParameter("birthday");
-	 
+		//Output text which is sent to client
+		String textOutput="";
+		
+		String emailValidateNotify="";
+		final String email_regex= "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+		Pattern pattern=Pattern.compile(email_regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher=pattern.matcher(emailInput);
+		if(!matcher.matches()){
+			emailValidateNotify="Email wrong format";
+		}
+		textOutput+=emailValidateNotify+"\n";
+		String dateValidateNotify="";
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+	    java.util.Date currentDate=new java.util.Date();
+		try {
+			java.util.Date parsedBirthday = formatter.parse(birthdayInput);
+			//java.util.Date parsedCurrentDate=formatter.parse(currentDate);
+			if(!parsedBirthday.before(currentDate)){
+				dateValidateNotify="Your Birthday > Current Date (It's illegal date)";
+			}
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		textOutput+=dateValidateNotify+"\n";
+		
+		
 		Connection myConn=null;
 		Statement mySta1=null;
 		ResultSet myRes=null;
 
 		try{
-			System.out.println("passwordInput");
+			//System.out.println("passwordInput");
 			boolean exist=false;
+			//Init a connection to demo database 
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
 			myConn=DriverManager.getConnection("jdbc:mysql://localhost:3306/demo?useSSL=false&allowPublicKeyRetrieval=true","student","student");
 			mySta1=myConn.createStatement();
@@ -56,12 +85,13 @@ public class checkInfo1 extends HttpServlet {
 			PrintWriter out=response.getWriter();
 			while(myRes.next()){
 				if(myRes.getString("username").equals(usernameInput)){
-					out.print("User exist");
+					textOutput+="User exist\n";
+					out.print(textOutput);
 					exist=true;
 				}
 			}
 			if(!exist){
-				System.out.println("test!!!!");
+				//System.out.println("test!!!!");
 				 java.util.Date date= new SimpleDateFormat("MM/dd/yyyy").parse(birthdayInput);
 				 java.sql.Date sqldate=new java.sql.Date(date.getTime()); 
 				 PreparedStatement mySta2;
@@ -75,7 +105,8 @@ public class checkInfo1 extends HttpServlet {
 				  mySta2.setString(3, emailInput);
 				  mySta2.setDate(4, sqldate);
 				  mySta2.executeUpdate();
-				out.print("Your user account has been added to our account");
+				  textOutput+="Your user account has been added to our account";
+				out.print(textOutput);
 				System.out.println("Your account has been added to our account");
 			}
 			

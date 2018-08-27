@@ -6,13 +6,19 @@ var month = d.getMonth();
 var year = d.getFullYear();
 var current_date = d.getDate();
 var dateOld;
-
+/**
+ * Display a calendar when click in it (hidden in default)
+ */
 function click_input() {
     document.getElementById("calendar-tools").style.visibility = "visible";
     changeSelectElement(month, year);
     modifyDate(month, year, d.getDate());
 }
-
+/**
+ * Change the calendar based on the values that are choosed by month select & year select
+ * @param {*} month_select - value from month select
+ * @param {*} year_select - value from year select
+ */
 function changeSelectElement(month_select, year_select) {
     var month_select = document.getElementById("month-select").options.selectedIndex = month;
     var length = document.getElementById("year-select").options.length;
@@ -45,6 +51,7 @@ function get_calendar(day_num, days, current_date) {
     table.appendChild(tr);
     //create second row
     tr = document.createElement("tr");
+    //Create black cells before the first day of the month
     for (var i = 0; i <= 6; i++) {
         if (i == day_num) {
             break;
@@ -87,7 +94,9 @@ function get_calendar(day_num, days, current_date) {
     }
 
 }
-
+/**
+ * load year data into year select
+ */
 function initYearSelect() {
     var select = document.getElementById("year-select");
     for (var i = 1900; i <= 2030; i++) {
@@ -97,19 +106,24 @@ function initYearSelect() {
         select.appendChild(option);
     }
 }
-
+/**
+ * Modify and display date
+ * @param {*} month_modify - month to modify
+ * @param {*} year_modify - year to modify
+ * @param {*} current_date - current date to display in the new month & year
+ */
 function modifyDate(month_modify, year_modify, current_date) {
+    //Clear the old calendar before create a new one
     var table = document.getElementById("myId");
     table.parentNode.removeChild(table);
-    var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018
+    var first_date = month_name[month] + " " + 1 + " " + year; // August 1 2018 (first date of the month)
+    //A day of this date
     var temp = new Date(first_date).toString(); // Wed, Aug 1 2018
     var first_day = temp.substring(0, 3); // return Wed
-
     var day_num = day_name.indexOf(first_day); // return 3
     //Get the last day
     var days = new Date(year, month + 1, 0).getDate(); //31
     var calendar = get_calendar(day_num, days, current_date);
-    // document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
     document.getElementById("calendar-dates").appendChild(calendar);
 }
 
@@ -146,7 +160,9 @@ function getPrevYear() {
     modifyDate(month, year, d.getDate());
     changeSelectElement(month, year);
 }
-
+/**
+ *  Change a calendar based on the value from a month select
+ */
 function update_month() {
     var month_selected = document.getElementById("month-select").value;
     var position;
@@ -159,13 +175,17 @@ function update_month() {
     month = position;
     modifyDate(month, year, d.getDate());
 }
-
+/**
+ *  Change a calendar based on the value from a year select
+ */
 function update_year() {
     var year_selected = document.getElementById("year-select").value;
     year = parseInt(year_selected);
     modifyDate(month, year, d.getDate());
 }
-
+/**
+ *  Get a value from input text a display a calendar
+ */
 function getDesiredDate() {
     var text = document.getElementById("birthday-input").value;
     var month_text = text.substring(0, 2);
@@ -177,16 +197,24 @@ function getDesiredDate() {
     modifyDate(month, year, day);
     changeSelectElement(month, year);
 }
-
+/**
+ * Callback function occur when a cell in a calendar is clicked 
+ * @param {*} currentCell - A cell is clicked
+ */
 function chooseDate(currentCell) {
+    //Text to display in input field
     var text;
+    //Store a current date
     dateOld = current_date;
+    //Store a date is clicked
     current_date = currentCell.innerHTML;
+    //Refer to table
     var tbl = document.getElementById("myId");
     if (tbl != null) {
         for (var i = 0; i < tbl.rows.length; i++) {
             for (var j = 0; j < tbl.rows[i].cells.length; j++) {
                 var test = tbl.rows[i].cells[j].innerHTML;
+                //Make the cell's color of the current date to white
                 if (test == dateOld) {
                     tbl.rows[i].cells[j].style.background = "#FFFFFF";
                 }
@@ -194,8 +222,10 @@ function chooseDate(currentCell) {
         }
 
     }
-    currentCell.style.background = "#00B2BF";
+    //Make the cell's color of the clicked date to green
+    currentCell.style.background = "#5BBD2B";
     var dayClick = currentCell.innerHTML;
+    //Get a value from month select to display in input field
     var monthString = document.getElementById("month-select").value;
     var monthDisplay;
     for (var i = 0; i < month_name.length; i++) {
@@ -203,12 +233,14 @@ function chooseDate(currentCell) {
             monthDisplay = i + 1;
         }
     }
+    //Get a value from year select to display in input filed
     var yearDisplay = document.getElementById("year-select").value;
     text = monthDisplay + "/" + dayClick + "/" + yearDisplay;
     document.getElementById("birthday-input").value = text;
 }
-
-
+/**
+ * OnClick function of cell
+ */
 function addRowHandlers() {
     var tbl = document.getElementById("myId");
     if (tbl != null) {

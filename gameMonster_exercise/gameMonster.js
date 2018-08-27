@@ -24,7 +24,7 @@ var pauseTime = 300;
 var isStop = false;
 var isResume = false;
 var isBoom = false;
-
+var isDecrease = false;
 //Set images for game
 var monsterImage = new Image();
 monsterImage.onload = function() {};
@@ -114,7 +114,7 @@ Monster.prototype.move = function() {
     if (this.startY > this.stopY || this.startY < this.positionY) {
         this.speedY *= -1;
     }
-    changeLevel();
+
     if (score == 0) {
         isLose = true;
     }
@@ -122,6 +122,7 @@ Monster.prototype.move = function() {
     if (timeLive <= 0) {
         this.refreshMonster;
         score -= 10;
+        isDecrease = true;
         chooseRandom();
     }
 
@@ -369,12 +370,6 @@ function main() {
         boom();
         isBoom = false;
     }
-    /*if (hearts == 0) {
-        var temp = parseInt(localStorage.getItem("highScore"));
-        if (temp < score) {
-            localStorage.setItem("highScore", score);
-        }
-    }*/
     if (isLose) {
         playroundContext.fillStyle = "#FFFFFF";
         playroundContext.font = "40px Arial";

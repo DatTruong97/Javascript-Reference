@@ -1,11 +1,11 @@
 var canvas;
 var context;
-window.onload = function() {
-    canvas = document.getElementById("canvas");
+/*window.onload = function() {
+    canvas = document.getElementById("canvas2");
     context = canvas.getContext("2d");
-}
-var canvas = document.getElementById("canvas");
-var context = canvas.getContext("2d");
+}*/
+canvas = document.getElementById("canvas2");
+context = canvas.getContext("2d");
 
 canvas.addEventListener("mousemove", function(event) {
     var mousePos = getMousePos(canvas, event);
@@ -24,6 +24,6 @@ function getMousePos(canvas, event) {
 function writeMessage(canvas, message) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.font = "18pt Arial";
-    context.fillStyle = "white";
+    context.fillStyle = "black";
     context.fillText(message, 10, 25);
 }

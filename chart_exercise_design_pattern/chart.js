@@ -175,6 +175,20 @@ var barChart = (function() {
         context4.moveTo(70 + spaceX, 260);
         context4.lineTo(400, 260);
         context4.stroke();
+        //draw bar
+        context4.fillStyle = "#3366CC";
+        context4.fillRect(100, 160, 30, 100);
+        context4.fillRect(150, 250, 30, 10);
+        context4.fillRect(200, 110, 30, 150);
+        context4.fillRect(250, 60, 30, 200);
+        context4.fillRect(300, 60, 30, 200);
+        //add text in Ox
+        context4.fillStyle = "black";
+        context4.fillText("A", 110, 280);
+        context4.fillText("B", 160, 280);
+        context4.fillText("C", 210, 280);
+        context4.fillText("E", 260, 280);
+        context4.fillText("F", 310, 280);
     }
     return {
         draw: drawChart

@@ -59,6 +59,7 @@
     position: absolute;
     top: 120px;
     left: -40px;
+    color: "#979797";
 }
 
 #right-chart4 {
@@ -73,6 +74,7 @@
 #footer-chart4 {
     margin: auto;
     text-align: center;
+    color: "#979797";
 }
 
 #subs-chart4 {

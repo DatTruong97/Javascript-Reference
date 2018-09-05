@@ -2,14 +2,30 @@ var canvas;
 var context;
 var canvas2;
 var context2;
-var circleChart = (function() {
 
+var circleChart = (function() {
     var xScale = 1;
     var yScale = 0.5;
     var centerX = 200;
     var centerY = 200;
     var i;
-
+    var data = [0.8, 0.2];
+    var validDataChart1 = true;
+    if (data[0] < 0 || data[0] > 1) {
+        alert("Error in chart 1: Illegal success input");
+        validDataChart1 = false;
+    }
+    if (data[1] < 0 || data[1] > 1) {
+        alert("Error in chart 1: Illegal fail input");
+        validDataChart1 = false;
+    }
+    if (data[0] + data[1] > 1 || data[0] + data[1] < 0) {
+        alert("Error in chart 1: Success + Fail !=100%");
+        validDataChart1 = false;
+    }
+    /**
+     * Draw circle chart
+     */
     function draw() {
         for (i = 50; i > 0; i--) {
             drawSuccess();
@@ -17,12 +33,14 @@ var circleChart = (function() {
             drawText();
         }
     }
-
+    /**
+     * Draw success part (a blue part)
+     */
     function drawSuccess() {
         context.save();
         context.scale(xScale, yScale);
         context.beginPath();
-        context.arc(centerX, centerY + i, 100, 0, 2 * Math.PI * 0.8);
+        context.arc(centerX, centerY + i, 100, 0, 2 * Math.PI * data[0]);
         context.lineTo(centerX, centerY + i);
         context.restore();
         if (i == 1) {
@@ -32,12 +50,14 @@ var circleChart = (function() {
         }
         context.fill();
     }
-
+    /**
+     * Draw fail part (a red part)
+     */
     function drawFail() {
         context.save();
         context.scale(xScale, yScale);
         context.beginPath();
-        context.arc(centerX + 7, centerY - 7 + i, 100, (2 * Math.PI * 0.8) + 0.01, -0.01);
+        context.arc(centerX + 5, centerY - 5 + i, 100, (2 * Math.PI * data[0]) + 0.01, -0.01);
         context.lineTo(centerX + 7, centerY - 7 + i);
         context.restore();
         if (i == 1) {
@@ -47,7 +67,15 @@ var circleChart = (function() {
         }
         context.fill();
     }
-
+    /**
+     * Draw line indicate to specific part
+     * @param {*} firstX - the horizontal position of starting point
+     * @param {*} firstY - the vertical position of starting point
+     * @param {*} secondX - the horizontal position of ending point
+     * @param {*} secondY - the vertical position of ending point
+     * @param {*} width - the width of the line
+     * @param {*} color - the color of the line
+     */
     function drawLine(firstX, firstY, secondX, secondY, width, color) {
         context.strokeStyle = color;
         context.lineWidth = 2;
@@ -58,18 +86,41 @@ var circleChart = (function() {
         context.lineTo(secondX, secondY);
         context.stroke();
     }
-
+    /**
+     * Draw line and fill entire text of the chart
+     */
     function drawText() {
-        drawLine(20, 50, 160, 100, 70, "#456AA4");
-        drawLine(400, 30, 250, 80, -70, "#E4322B");
+        //draw line 
+        var lableSpace1 = 0;
+        var lableSpace2 = 0;
+        var lableX1 = 0;
+        var lableX2 = 0;
+        var lableY1 = 0;
+        var lableY2 = 0;
+        radian = 1 - data[0];
+        lableSpace1 = (100 * 2 / 3) * xScale * Math.cos(2 * Math.PI * radian);
+        lableSpace2 = (100 * 2 / 3) * yScale * Math.sin(2 * Math.PI * radian);
+        lableX1 = (centerX + 18) * xScale + lableSpace1;
+        lableY1 = (centerY - 2) * yScale - lableSpace2;
+        lableX2 = 2 * centerX * xScale - lableX1;
+        lableY2 = 2 * centerY * yScale - lableY1;
+        if (data[0] >= 0.5) {
+            drawLine(20, 50, lableX2, lableY2, 70, "#456AA4");
+            drawLine(400, 30, lableX1, lableY1, -70, "#E4322B");
+        } else {
+            drawLine(20, 50, lableX1, lableY1, 70, "#456AA4");
+            drawLine(400, 30, lableX2, lableY2, -70, "#E4322B");
+        }
+        //fill text
         context.fillStyle = "#A29FA1";
-        context.fillText("80% ĐÃ ĐẠT", 20, 45);
-        context.fillText("20% CHƯA ĐẠT", 330, 25);
+        context.fillText(data[0] * 100 + "% ĐÃ ĐẠT", 20, 45);
+        context.fillText(data[1] * 100 + "% CHƯA ĐẠT", 330, 25);
         context.fillStyle = "#88D0DA";
         context.fillText("BIỂU ĐỒ TỔNG QUAN KHUNG NĂNG LỰC", 100, 200);
     }
     return {
-        draw: draw
+        draw: draw,
+        valid: validDataChart1
     };
 })();
 
@@ -119,7 +170,28 @@ var sineChart = (function() {
 var pieChart = (function() {
     var datas = [10, 20, 10, 60];
     var colors = ["#4267B1", "#DB3D26", "#F8991D", "#189747"];
-
+    var validDataChart3 = true;
+    var sum = 0;
+    for (var i = 0; i < datas.length; i++) {
+        if (datas[i] < 0 || datas[i] > 100) {
+            alert("Error in chart 3: Invalid input data (input data < 0 or input data > 100)");
+            validDataChart3 = false;
+        }
+        sum += datas[i];
+    }
+    if (sum > 100) {
+        alert("Error in chart 3: Total percentage > 100");
+        validDataChart3 = false;
+    }
+    /**
+     * Draw a slice of the pie chart
+     * @param {*} positionX - Horizontal position of the starting point 
+     * @param {*} positionY - Vertical position of the starting point
+     * @param {*} radius - Radius of the slice
+     * @param {*} startAngle - The start angle of the slice
+     * @param {*} endAngle - The end angle of the slice
+     * @param {*} color - The color of the slice
+     */
     function drawSlice(positionX, positionY, radius, startAngle, endAngle, color) {
         context3.fillStyle = color;
         context3.beginPath();
@@ -128,21 +200,31 @@ var pieChart = (function() {
         context3.closePath();
         context3.fill();
     }
-
+    /**
+     * Draw pie chart and fill text
+     */
     function drawChart() {
+        var offset = 40;
+        var labelX;
+        var labelY;
+        var pieRadius = 75;
         var startAngle = -Math.PI / 2;
         for (var i = 0; i < datas.length; i++) {
             var sliceAngle = 2 * Math.PI * (datas[i] / 100);
+            labelX = canvas3.width / 2 + (offset + (pieRadius / 2)) * Math.cos(startAngle + sliceAngle * 0.5);
+            labelY = canvas3.height / 2 + (offset + (pieRadius / 2)) * Math.sin(startAngle + sliceAngle * 0.5);
             drawSlice(200, 150, 100, startAngle, startAngle + sliceAngle, colors[i]);
+            drawText(datas[i] + "%", labelX - 70, labelY + 5);
             startAngle += sliceAngle;
         }
-        drawText("10%", 220, 80);
-        drawText("20%", 260, 130);
-        drawText("10%", 250, 200);
-        drawText("60%", 130, 200);
         drawSlice(200, 150, 50, 0, Math.PI * 2, "#ffffff");
     }
-
+    /**
+     * Fill text into specific slice
+     * @param {*} data - data to display
+     * @param {*} posX - Horizontal position where a text appear
+     * @param {*} posY - Vertical position where a text appear
+     */
     function drawText(data, posX, posY) {
         context3.fillStyle = "black";
         context3.font = "14px Arial";
@@ -150,10 +232,20 @@ var pieChart = (function() {
     }
 
     return {
-        draw: drawChart
+        draw: drawChart,
+        valid: validDataChart3
     };
 })();
 var barChart = (function() {
+    var data = [2, 0.1, 3, 4, 4];
+    var validDataChart4 = true;
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] < 0) {
+            alert("Error in chart 4: Iligal input data (input data < 0)");
+            validDataChart4 = false;
+        }
+    }
+
     function drawChart() {
         context4.beginPath();
         context4.strokeStyle = "#E5E3E3";
@@ -175,23 +267,26 @@ var barChart = (function() {
         context4.moveTo(70 + spaceX, 260);
         context4.lineTo(400, 260);
         context4.stroke();
-        //draw bar
-        context4.fillStyle = "#3366CC";
-        context4.fillRect(100, 160, 30, 100);
-        context4.fillRect(150, 250, 30, 10);
-        context4.fillRect(200, 110, 30, 150);
-        context4.fillRect(250, 60, 30, 200);
-        context4.fillRect(300, 60, 30, 200);
         //add text in Ox
         context4.fillStyle = "black";
-        context4.fillText("A", 110, 280);
-        context4.fillText("B", 160, 280);
-        context4.fillText("C", 210, 280);
-        context4.fillText("E", 260, 280);
-        context4.fillText("F", 310, 280);
+        context4.fillText("A", 105, 280);
+        context4.fillText("B", 150, 280);
+        context4.fillText("C", 195, 280);
+        context4.fillText("E", 240, 280);
+        context4.fillText("F", 290, 280);
+        //draw bar
+        context4.fillStyle = "#3366CC";
+        yScale = (canvas4.height - 100) / 4;
+        xScale = (canvas4.width - 320) / 4;
+        context4.translate(90, canvas4.height - 80 / 2);
+        context4.scale(xScale, -1 * yScale);
+        for (i = 0; i <= 4; i++) {
+            context4.fillRect(i + 0.15, 0, 0.6, data[i]);
+        }
     }
     return {
-        draw: drawChart
+        draw: drawChart,
+        valid: validDataChart4
     };
 })();
 window.onload = function() {
@@ -203,8 +298,14 @@ window.onload = function() {
     context3 = canvas3.getContext("2d");
     canvas4 = document.getElementById("canvas4");
     context4 = canvas4.getContext("2d");
-    circleChart.draw();
+    if (circleChart.valid) {
+        circleChart.draw();
+    }
     sineChart.draw();
-    pieChart.draw();
-    barChart.draw();
+    if (pieChart.valid) {
+        pieChart.draw();
+    }
+    if (barChart.valid) {
+        barChart.draw();
+    }
 };

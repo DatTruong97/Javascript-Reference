@@ -1,0 +1,235 @@
+/*
+*
+*Container
+*
+*/
+
+div.container {
+    width: 98%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0px;
+}
+
+
+/*
+*
+*Header
+*
+*/
+
+div.header {
+    width: 100%;
+    height: auto;
+    border-top: 4px solid #F0831E;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+div.header-inner h1 {
+    font-size: 12px;
+}
+
+div.header-inner {
+    width: 73%;
+    height: auto;
+    margin: 0 auto;
+}
+
+div.header-inner img {
+    margin-top: 11px;
+    max-width: 430px;
+    width: 100%;
+}
+
+div.header-info {
+    height: auto;
+}
+
+div.header-right {
+    float: right;
+    clear: right;
+    font-size: 13px;
+    text-align: right;
+    height: 100%;
+}
+
+div.header-right img {
+    max-width: 85%;
+}
+
+div.header-right p {
+    padding: 1px 0px 0px 0px;
+    margin: 0px;
+}
+
+div.header-right span {
+    color: #F0831E;
+}
+
+
+/*
+*
+*Navigate
+*
+*/
+
+div.nav {
+    width: 100%;
+    height: auto;
+    margin: 5px 0px 0px 0px;
+    background: url("images/bg_menu.jpg") repeat-x left top;
+}
+
+div.menus ul {
+    height: 54px;
+    list-style-type: none;
+    padding: 0px;
+    padding-left: 1px;
+    margin: 1px 0px 0px 15px;
+    overflow: hidden;
+    background: url("images/line_menu.jpg") no-repeat top left;
+}
+
+div.menus {
+    max-width: 965px;
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    overflow: auto;
+}
+
+div.menus ul li.menu1,
+div.menus ul li.menu2,
+div.menus ul li.menu3,
+div.menus ul li.menu4,
+div.menus ul li.menu5,
+div.menus ul li.menu6,
+div.menus ul li.menu7 {
+    max-width: 133px;
+    width: 100%;
+    height: 54px;
+    float: left;
+    clear: none;
+    margin-right: 2px;
+    background: url("images/line_menu.jpg") no-repeat right center;
+}
+
+div.menus ul li a {
+    display: block;
+    height: 53px;
+}
+
+div.menus ul li.menu1 a.active {
+    background: url("images/menu_1_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li.menu1 a.active img {
+    display: none;
+}
+
+div.menus ul li a.menu1:hover img,
+div.menus ul li a.menu2:hover img,
+div.menus ul li a.menu3:hover img,
+div.menus ul li a.menu4:hover img,
+div.menus ul li a.menu5:hover img,
+div.menus ul li a.menu6:hover img,
+div.menus ul li a.menu7:hover img {
+    display: none;
+}
+
+div.menus ul li a.menu1:hover {
+    background: url("images/menu_1_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu2:hover {
+    background: url("images/menu_2_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu3:hover {
+    background: url("images/menu_3_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu4:hover {
+    background: url("images/menu_4_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu5:hover {
+    background: url("images/menu_5_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu6:hover {
+    background: url("images/menu_6_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li a.menu7:hover {
+    background: url("images/menu_7_hover.jpg") no-repeat center center;
+}
+
+div.menus ul li ul.subNav a {
+    color: black;
+    text-decoration: none;
+    text-align: center;
+}
+
+div.menus ul li.menu3 ul.subNav,
+div.menus ul li.menu4 ul.subNav {
+    display: none;
+    margin-left: 0px;
+}
+
+div.menus ul li.menu4:hover ul.subNav,
+div.menus ul li.menu3:hover ul.subNav {
+    background: none repeat scroll 0 0 #ffc472;
+    display: block;
+    height: auto;
+    width: 133px;
+    position: absolute;
+}
+
+div.menus ul li ul.subNav li.subNav_no_b {
+    border: none;
+}
+
+div.menus ul li ul.subNav li {
+    border-bottom: 1px solid #d19c5d;
+    height: 30px;
+    margin: 5px 5px 5px 5px;
+    font-size: 13px;
+}
+
+div.menus ul li ul.subNav li.subNav:hover {
+    background: url("images/bg_menu_sub.jpg");
+}
+
+div.menus ul li ul.subNav li.subNav:hover a {
+    color: #ffffff;
+}
+
+
+/*
+*
+*Slider
+*
+*/
+
+div.slider {
+    padding: 0px;
+    margin-top: -15px;
+    list-style-type: none;
+    background: url("images/bg_banner.jpg") repeat-x top left;
+}
+
+div.slider-inner {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+div.slider-inner ul {
+    list-style-type: none;
+    padding: 0px;
+    width: 100%;
+}
+
+div.slider-inner ul.slider-content li img {}

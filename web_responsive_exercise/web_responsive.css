@@ -218,6 +218,8 @@ div.slider {
     margin-top: -15px;
     list-style-type: none;
     background: url("images/bg_banner.jpg") repeat-x top left;
+    position: relative;
+    z-index: -2;
 }
 
 div.slider-inner {
@@ -232,4 +234,19 @@ div.slider-inner ul {
     width: 100%;
 }
 
-div.slider-inner ul.slider-content li img {}
+
+/*
+*
+*Main content
+*
+*/
+
+div.main {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+div.title1 {
+    background: url("images/line_title.jpg") no-repeat left bottom;
+}

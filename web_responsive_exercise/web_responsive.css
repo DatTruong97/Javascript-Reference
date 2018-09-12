@@ -4,6 +4,12 @@
 *
 */
 
+body {
+    outline: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
 div.container {
     width: 98%;
     height: auto;
@@ -31,7 +37,9 @@ div.header-inner h1 {
 }
 
 div.header-inner {
-    width: 73%;
+    overflow: hidden;
+    width: 100%;
+    max-width: 964px;
     height: auto;
     margin: 0 auto;
 }
@@ -52,6 +60,8 @@ div.header-right {
     font-size: 13px;
     text-align: right;
     height: 100%;
+    max-width: 242px;
+    width: 100%;
 }
 
 div.header-right img {
@@ -539,6 +549,11 @@ div.footer-block2,
 div.footer-block3 {
     float: left;
     clear: none;
+}
+
+div.footer-block1 {
+    max-width: 280px;
+    width: 100%;
 }
 
 div.footer-block2 {
